@@ -38,7 +38,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - run: |
-          if [[`cat /tmp/workspace/output.txt` == "Hello World"]]; then
+          if [[ `cat /tmp/workspace/output.txt` == "Hello World" ]]; then
             echo "It worked";
           else
             echo "Failed to access workspace"; exit 1
