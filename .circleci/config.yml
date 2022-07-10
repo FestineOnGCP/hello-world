@@ -16,19 +16,19 @@ orbs:
 jobs:
   print-hello:
     docker:
-      image: circleci/node:13.8.0
-      steps:
-        - run:
-            name: Output hello
-            command: echo Hello
+      - image: circleci/node:13.8.0
+    steps:
+      - run:
+          name: Output hello
+          command: echo Hello
 
   print-world:
     docker: 
-      image: circleci/node:13.8.0
-      steps:
-        - run:
-            name: Output world
-            command: echo World!
+      - image: circleci/node:13.8.0
+    steps:
+      - run:
+          name: Output world
+          command: echo World!
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -37,5 +37,6 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - print-hello
-      - print-world
-          requires: print-hello
+      - print-world:
+          requires: 
+            - print-hello
