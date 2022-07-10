@@ -10,7 +10,8 @@ commands:
         type: string
         default: $CIRCLE_WORKFLOW_ID
     steps:
-      - run: echo The pipeline ID is << parameters.to >>
+      - run: |
+          echo The pipeline ID is: << parameters.to >>
 
 executors:
   my-exec-env:
