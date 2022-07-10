@@ -2,6 +2,12 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+executors:
+  my-exec-env:
+    docker:
+      - image: circleci/node:13.8.0
+    working_directory: /tmp
+
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
@@ -14,21 +20,30 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  print-hello:
-    docker:
-      - image: circleci/node:13.8.0
+  save-hello-world:
+    executor: my-exec-env
     steps:
+      - run: mkdir -p workspace # [{run: "mkdir -p workspace"}]
       - run:
-          name: Output hello
-          command: echo Hello
+          name: Save "Hello World to output.txt file"
+          command: echo "Hello World" > workspace/output.txt
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - output.txt
 
-  print-world:
-    docker: 
-      - image: circleci/node:13.8.0
+  print-output-file:
+    executor: my-exec-env
     steps:
-      - run:
-          name: Output world
-          command: echo "World! ${NAME}"
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: |
+          if [[`cat /tmp/workspace/output.txt`]]; then
+            echo "It worked";
+          else
+            echo "Failed to access workspace"; exit 1
+          fi
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -36,7 +51,7 @@ workflows:
   default: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - print-hello
-      - print-world:
+      - save-hello-world
+      - print-output-file:
           requires: 
-            - print-hello
+            - save-hello-world
