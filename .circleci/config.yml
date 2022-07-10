@@ -28,7 +28,7 @@ jobs:
     steps:
       - run:
           name: Output world
-          command: echo $NAME | base64 --decode | echo World! --std
+          command: echo World! ${NAME}
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
