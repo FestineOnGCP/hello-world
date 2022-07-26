@@ -63,10 +63,8 @@ jobs:
           if curl -s --head ${URL}
           then 
             echo "It worked"
-            return 0
           else 
             echo "Failed"
-            return 1
           fi
 
   # show-pipeline-id:
