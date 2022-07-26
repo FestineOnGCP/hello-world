@@ -55,19 +55,33 @@ jobs:
             echo "Failed to access workspace"; exit 1
           fi
 
-  show-pipeline-id:
+  smoke-test:
     executor: my-exec-env
     steps:
-      - print-pipeline-id
+      - run: |
+          URL="https://blog.udacity.com/"
+          if curl -s --head ${URL}
+          then 
+            echo "It worked"
+            return 0
+          else 
+            echo "Failed"
+            return 1
+          fi
 
-  failed-job:
-    executor: my-exec-env
-    steps:
-      - run: return 1
-      - run: 
-          name: runs only if the first step fails
-          command: echo Hello Error
-          when: on_fail
+  # show-pipeline-id:
+  #   executor: my-exec-env
+  #   steps:
+  #     - print-pipeline-id
+
+  # failed-job:
+  #   executor: my-exec-env
+  #   steps:
+  #     - run: return 1
+  #     - run: 
+  #         name: runs only if the first step fails
+  #         command: echo Hello Error
+  #         when: on_fail
 
 
 # Invoke jobs via workflows
