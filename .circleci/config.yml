@@ -92,7 +92,6 @@ workflows:
     jobs:
       - save-hello-world
       - print-output-file:
-          requires: 
+          requires:
             - save-hello-world
-      - show-pipeline-id
-      - failed-job
+      - smoke-test
